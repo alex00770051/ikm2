@@ -1,6 +1,3 @@
-
-
-
 class Node:
     def __init__(self, data=None):
         self.data = data
@@ -70,7 +67,15 @@ class TreeManager:
             print(f"Ошибка: файл '{filename}' не найден.")
             exit(1)
 
-        entries.sort(key=lambda x: len(x[1]))
+        # Ручная сортировка вставками по длине кода
+        for i in range(1, len(entries)):
+            key = entries[i]
+            j = i - 1
+            while j >= 0 and len(entries[j][1]) > len(key[1]):
+                entries[j + 1] = entries[j]
+                j -= 1
+            entries[j + 1] = key
+
         for number, code in entries:
             node = self.ensure_path(self.root, code, prompt_intermediate=True, prompt_final=False, final_value=number)
             if node.data != number:
@@ -89,7 +94,15 @@ class TreeManager:
                 continue
             entries.append((int(parts[0]), parts[1]))
 
-        entries.sort(key=lambda x: len(x[1]))
+        # Ручная сортировка вставками по длине кода
+        for i in range(1, len(entries)):
+            key = entries[i]
+            j = i - 1
+            while j >= 0 and len(entries[j][1]) > len(key[1]):
+                entries[j + 1] = entries[j]
+                j -= 1
+            entries[j + 1] = key
+
         for number, code in entries:
             node = self.ensure_path(self.root, code, prompt_intermediate=True, prompt_final=False, final_value=number)
             if node.data != number:
