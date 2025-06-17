@@ -5,6 +5,7 @@
 
 class Node:
     """Класс узла двоичного дерева"""
+    
     def __init__(self, data=None):
         self.data = data    # Значение узла
         self.left = None    # Левый потомок
@@ -13,22 +14,21 @@ class Node:
 
 class TreeManager:
     """Класс для управления двоичным деревом и операциями с ним"""
-
+    
     def __init__(self):
         """Инициализация дерева с корневым узлом (значение 0)"""
         self.root = Node(0)
 
+
     def ensure_path(self, node, code, prompt_intermediate, prompt_final, final_value=None):
         """
         Создает путь в дереве по заданному коду.
-
         Args:
             node: текущий узел
             code: оставшаяся часть кода пути
             prompt_intermediate: запрашивать ли значения для промежуточных узлов
             prompt_final: запрашивать ли значения для конечных узлов
             final_value: значение для установки в конечном узле (если указано)
-
         Returns:
             Созданный/найденный конечный узел
         """
@@ -49,6 +49,7 @@ class TreeManager:
 
         return self.ensure_path(child, code[1:], prompt_intermediate, prompt_final, final_value)
 
+
     def _create_node_with_prompt(self, code):
         """Запрашивает у пользователя значение для нового узла"""
         while True:
@@ -58,15 +59,14 @@ class TreeManager:
                 return Node(int(text))
             print("Ошибка: нужно целое неотрицательное число.")
 
+
     def collect_nodes(self, node, path="", out=None):
         """
         Собирает все узлы дерева с их путями и значениями.
-
         Args:
             node: текущий узел
             path: текущий путь от корня
             out: список для сбора результатов
-
         Returns:
             Список кортежей (путь, значение)
         """
@@ -79,6 +79,7 @@ class TreeManager:
             self.collect_nodes(node.right, path + "1", out)
         return out
 
+
     def print_all(self):
         """Выводит полную информацию о дереве"""
         print("\nСписок узлов (код путь : значение):")
@@ -88,10 +89,10 @@ class TreeManager:
         print("\nГоризонтальное представление дерева:")
         self._print_tree(self.root)
 
+
     def _print_tree(self, node, level=0):
         """
         Рекурсивно печатает дерево в горизонтальном формате.
-
         Args:
             node: текущий узел
             level: текущий уровень вложенности
@@ -109,13 +110,12 @@ class InputHandler:
     def __init__(self):
         self.entries = []  # Список пар (число, код)
 
+
     def process_file(self, filename):
         """
         Читает и обрабатывает данные из файла.
-
         Args:
             filename: имя файла для чтения
-
         Returns:
             Отсортированный список входных данных или None при ошибке
         """
@@ -128,6 +128,7 @@ class InputHandler:
             print(f"Ошибка: файл '{filename}' не найден.")
             return None
 
+
     def process_manual_input(self):
         """Обрабатывает ручной ввод данных пользователем"""
         print("Ручной ввод. Формат: <число> <код 0/1>, 'q' — выход.")
@@ -137,6 +138,7 @@ class InputHandler:
                 break
             self._process_line(s)
         return self._sort_entries()
+
 
     def _process_line(self, line, lineno=None):
         """
@@ -157,6 +159,7 @@ class InputHandler:
                 print("Неверный формат, повторите.")
             return
         self.entries.append((int(parts[0]), parts[1]))
+
 
     def _sort_entries(self):
         """Сортирует входные данные по длине кода (от коротких к длинным)"""
