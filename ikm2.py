@@ -5,7 +5,7 @@
 
 class Node:
     """Класс узла двоичного дерева"""
-    
+
     def __init__(self, data=None):
         self.data = data    # Значение узла
         self.left = None    # Левый потомок
@@ -14,7 +14,7 @@ class Node:
 
 class TreeManager:
     """Класс для управления двоичным деревом и операциями с ним"""
-    
+
     def __init__(self):
         """Инициализация дерева с корневым узлом (значение 0)"""
         self.root = Node(0)
@@ -109,7 +109,7 @@ class InputHandler:
 
     def __init__(self):
         self.entries = []  # Список пар (число, код)
-
+        self.seen_codes = set()  # Множество для отслеживания уникальных кодов
 
     def process_file(self, filename):
         """
@@ -128,7 +128,6 @@ class InputHandler:
             print(f"Ошибка: файл '{filename}' не найден.")
             return None
 
-
     def process_manual_input(self):
         """Обрабатывает ручной ввод данных пользователем"""
         print("Ручной ввод. Формат: <число> <код 0/1>, 'q' — выход.")
@@ -138,7 +137,6 @@ class InputHandler:
                 break
             self._process_line(s)
         return self._sort_entries()
-
 
     def _process_line(self, line, lineno=None):
         """
@@ -158,8 +156,17 @@ class InputHandler:
             else:
                 print("Неверный формат, повторите.")
             return
-        self.entries.append((int(parts[0]), parts[1]))
 
+        number, code = int(parts[0]), parts[1]
+        if code in self.seen_codes:
+            if lineno:
+                print(f"[Строка {lineno}] Пропущена: код '{code}' уже использован ранее.")
+            else:
+                print(f"Код '{code}' уже использован ранее, пропускаем.")
+            return
+
+        self.entries.append((number, code))
+        self.seen_codes.add(code)
 
     def _sort_entries(self):
         """Сортирует входные данные по длине кода (от коротких к длинным)"""
@@ -171,7 +178,6 @@ class InputHandler:
                 j -= 1
             self.entries[j + 1] = key
         return self.entries
-
 
 def main():
     """Основная функция программы"""
